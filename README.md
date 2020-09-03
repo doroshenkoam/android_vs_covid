@@ -1,1 +1,1 @@
-# survival
+# survival game prototype

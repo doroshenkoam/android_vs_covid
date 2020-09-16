@@ -66,14 +66,21 @@ def game_intro(font):
 
 
 # game_over - конец игры, проиграли
-def game_over(intro_font):
+def game_over(intro_font, point, viruses):
     global runing
     global intro
     intro = True
-    runing = False
+    runing = True
     WIN.blit(load_image("game_over.jpg"), (0, 0))
     pygame.display.flip()
     sleep(3)
+
+    # обновляем счетчик и хп
+    point.count = 0
+    for virus in viruses:
+        virus.points = 0
+        virus.start_position()
+
     game_intro(intro_font)
 
 
@@ -129,9 +136,10 @@ class player(pygame.sprite.Sprite):
     def wound(self):
         self.health -= 1
 
-    def kill(self, intro_font):
+    def kill(self, intro_font, point, viruses):
         if self.health <= 0:
-            game_over(intro_font)
+            self.health = 100
+            game_over(intro_font, point, viruses)
 
 
 # enemy - класс врагов
@@ -166,6 +174,11 @@ class enemy(pygame.sprite.Sprite):
 
     def get_points(self):
         return self.points
+
+    def start_position(self):
+        self.rect.x = 900
+        self.velocity = 10
+        self.counter = 0
 
 
 def re_draw_window(man, point, viruses):
@@ -263,7 +276,7 @@ def main():
         re_draw_window(man, point, viruses)
 
         # если перса убили, конец игры
-        man.kill(intro_font)
+        man.kill(intro_font, point, viruses)
 
 
 if __name__ == "__main__":

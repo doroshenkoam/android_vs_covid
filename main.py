@@ -13,12 +13,66 @@ WINDOW_SIZE = (800, 600)
 DIR = "asset"
 WIN = pygame.display.set_mode(WINDOW_SIZE)
 runing = True
+intro = True
+
+# game_intro - меню
+def game_intro(font, clock):
+    global intro
+    global runing
+
+    img = load_image("game_intro.jpg")
+
+    while intro:
+        clock.tick(FPS)
+
+        for i in pygame.event.get():
+            if i.type == pygame.QUIT:
+                intro = False
+                runing = False
+                break
+
+        # управление
+        keys = pygame.key.get_pressed()
+
+        if keys[pygame.K_ESCAPE]:
+            intro = False
+            runing = False
+            break
+
+        if keys[pygame.K_KP_ENTER]:
+            intro = False
+            sleep(1)
+            break
+
+        WIN.blit(img, (0, 0))
+        text1 = font.render(
+            "ANDROID VS COVID-19",
+            1,
+            (180, 0, 0),
+        )
+        text2 = font.render(
+            "Press Enter to start game",
+            1,
+            (180, 0, 0),
+        )
+        text3 = font.render(
+            "Press Esq to quit",
+            1,
+            (180, 0, 0),
+        )
+        WIN.blit(text1, (50, 100))
+        WIN.blit(text2, (50, 200))
+        WIN.blit(text3, (50, 300))
+        pygame.display.update()
 
 
+# game_over - конец игры, проиграли
 def game_over():
+    global runing
+    runing = False
     WIN.blit(load_image("game_over.jpg"), (0, 0))
-    pygame.display.flip()  # Add this.
-    sleep(5)
+    pygame.display.flip()
+    sleep(3)
     pygame.quit()
 
 
@@ -88,8 +142,8 @@ class enemy(pygame.sprite.Sprite):
         self.add(group)
         self.rect.x = x
         self.rect.y = y
-        self.width = width
-        self.height = height
+        self.width = width - 50
+        self.height = height - 50
         self.velocity = 10
         self.counter = 0
         self.points = 0
@@ -126,12 +180,16 @@ def main():
     global BG
     global runing
 
-    # настройки окна
-    pygame.display.set_caption(GAME_NAME)
-    BG = load_image("imgonline-com-ua-Resize-D1KIqVCWF3.jpg")
-
     # тикер отрисовки кадров
     clock = pygame.time.Clock()
+    # настройки окна
+    pygame.display.set_caption(GAME_NAME)
+
+    # игровое меню
+    intro_font = pygame.font.Font(None, 72)
+    game_intro(intro_font, clock)
+
+    BG = load_image("bg.jpg")
 
     # очки
     points_font = pygame.font.Font(None, 36)
@@ -151,6 +209,7 @@ def main():
         for i in pygame.event.get():
             if i.type == pygame.QUIT:
                 runing = False
+                break
 
         # враги
         for virus in viruses:
@@ -166,6 +225,7 @@ def main():
 
         if keys[pygame.K_ESCAPE]:
             runing = False
+            break
 
         # анализ движения
         if keys[pygame.K_LEFT] and man.rect.x > man.velocity:

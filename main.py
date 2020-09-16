@@ -16,14 +16,13 @@ runing = True
 intro = True
 
 # game_intro - меню
-def game_intro(font, clock):
+def game_intro(font):
     global intro
     global runing
 
     img = load_image("game_intro.jpg")
 
     while intro:
-        clock.tick(FPS)
 
         for i in pygame.event.get():
             if i.type == pygame.QUIT:
@@ -67,13 +66,15 @@ def game_intro(font, clock):
 
 
 # game_over - конец игры, проиграли
-def game_over():
+def game_over(intro_font):
     global runing
+    global intro
+    intro = True
     runing = False
     WIN.blit(load_image("game_over.jpg"), (0, 0))
     pygame.display.flip()
     sleep(3)
-    pygame.quit()
+    game_intro(intro_font)
 
 
 def load_image(file_name):
@@ -128,9 +129,9 @@ class player(pygame.sprite.Sprite):
     def wound(self):
         self.health -= 1
 
-    def kill(self):
+    def kill(self, intro_font):
         if self.health <= 0:
-            game_over()
+            game_over(intro_font)
 
 
 # enemy - класс врагов
@@ -187,7 +188,7 @@ def main():
 
     # игровое меню
     intro_font = pygame.font.Font(None, 72)
-    game_intro(intro_font, clock)
+    game_intro(intro_font)
 
     BG = load_image("bg.jpg")
 
@@ -262,7 +263,7 @@ def main():
         re_draw_window(man, point, viruses)
 
         # если перса убили, конец игры
-        man.kill()
+        man.kill(intro_font)
 
 
 if __name__ == "__main__":

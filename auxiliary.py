@@ -20,8 +20,9 @@ def game_over(intro_font, point, viruses):
     c.intro = True
     c.runing = True
     c.WIN.blit(load_image("game_over.jpg"), (0, 0))
+    draw_final_points(point)
     pygame.display.flip()
-    sleep(3)
+    sleep(5)
 
     # обновляем счетчик и хп
     point.count = 0
@@ -87,3 +88,13 @@ def re_draw_window(BG, man, point, viruses):
     for virus in viruses:
         virus.draw()
     pygame.display.update()
+
+
+def draw_final_points(point):
+    font = pygame.font.Font(None, 110)
+    text = font.render(
+        f"YOU POINTS: {point.get()}",
+        1,
+        (50, 205, 50),
+    )
+    c.WIN.blit(text, (100, 200))

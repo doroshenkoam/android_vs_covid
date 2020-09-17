@@ -14,3 +14,6 @@ class points:
 
     def up(self, point):
         self.count = point
+
+    def get(self):
+        return self.count

@@ -28,7 +28,7 @@ def main():
     point = po.points(points_font)
     # игровой персонаж
     health_font = pygame.font.Font(None, 72)
-    man = p.player((800 - 130) / 2, 375, 110, 130, health_font)
+    man = p.player((800 - 130) / 2, 375, 70, 70, health_font)
     # враги
     viruses = pygame.sprite.Group()
     viruses.add(e.enemy(900, 390, 150, 150, viruses))

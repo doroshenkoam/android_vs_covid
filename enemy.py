@@ -26,12 +26,12 @@ class enemy(pygame.sprite.Sprite):
     def move(self):
         if self.rect.x < 0:
             self.points += 1
-            self.rect.x = 900 + randint(0, 1000)
+            self.rect.x = 900 + randint(0, 3000)
         self.rect.x -= self.velocity
         self.counter += 1
 
         # увеличиваем скорость
-        if self.counter == 10 * c.FPS:
+        if self.counter == 5 * c.FPS:
             self.velocity += 1
             self.counter = 0
 
